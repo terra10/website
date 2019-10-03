@@ -1,0 +1,24 @@
+{
+  "name": "serverless",
+  "version": "1.0.0",
+  "description": "Serverless webpack example using Typescript",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.542.0",
+    "node-fetch": "^2.6.0",
+    "xml-to-json-promise": "0.0.3"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.17",
+    "@types/node": "^10.12.18",
+    "ts-loader": "^5.3.3",
+    "tslint": "^5.20.0",
+    "typescript": "^3.2.4",
+    "ts-node": "^8.4.1"
+  },
+  "author": "The serverless webpack authors (https://github.com/elastic-coders/serverless-webpack)",
+  "license": "MIT"
+}

@@ -1,0 +1,10 @@
+algemeen: 
+  postfix: -dev 
+  prefix: dev- 
+  prefix-web: dev.
+functie: 
+  getWordpressFeed: 
+    DYNAMODBBLOG: ${self:service.name}-dev 
+  getBlog: 
+    CORS_ORIGIN: https://dev.terra10.io,https://dev.terra10.io 
+    DYNAMODBBLOG: ${self:service.name}-devs

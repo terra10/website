@@ -1,0 +1,12 @@
+Resources: 
+  RECORDWEB: 
+    Type: AWS::Route53::RecordSet 
+    Properties: 
+      AliasTarget: 
+        DNSName: 
+          Fn::GetAtt: CLOUDFRONTDISTRIBUTION.DomainName 
+        HostedZoneId: Z23YTRUA53MZR 
+      HostedZoneName: terra10.io. 
+      Comment: terra10.nl 
+      Name: ${file(./serverless.yml):custom.prefix-web}terraio.nl. 
+      Type: A

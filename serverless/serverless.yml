@@ -1,0 +1,46 @@
+service:
+  name: website-backend
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  region: eu-west-1
+  stage: dev
+  versionFunctions: false
+  logRetentionInDays: 7
+  deploymentBucket:
+    name: serverlessdeployment.${self:provider.region}.terra10.nl
+
+resources: 
+    - ${file(resources/cloudfront.yml)} 
+    - ${file(resources/database.yml)}
+    - ${file(resources/route53.yml)}
+
+functions: 
+  getBlog: 
+    handler: lib/getBlog.handler 
+    description: GET all blog items from table
+    environment: 
+      ${self:custom.environment.functie.getBlog} 
+    events: 
+    - http: 
+        cors: true 
+        method: get 
+        path: blog 
+        private: true 
+  getWordpressFeed: 
+    handler: lib/getWordpressFeed.handler 
+    description: GET feed from WordPress 
+    environment: 
+      ${self:custom.environment.functie.getWordpressFeed} 
+    events: 
+    - http: 
+        method: get 
+        path: feed 
+        private: true 
+
+custom: 
+  environment: ${file(./environment/dev.yml)} 
+  prefix: ${file(./environment/dev.yml):algemeen.prefix} 
+  prefix-web: ${file(./environment/dev.yml):algemeen.prefix-web} 
+  postfix: ${file(./environment/dev.yml):algemeen.postfix}
