@@ -1,0 +1,12 @@
+algemeen: 
+  postfix: -prd 
+  prefix: prd- 
+  prefix-web: ""
+  certarn-io: 81370bc8-bd5a-4cd9-bb4d-abf598c8f051
+  certarn-nl: 18a3e5e1-d6a4-430a-8b3f-bc46fe7117d8
+functie: 
+  getWordpressFeed: 
+    DYNAMODBBLOG: ${self:service.name}-prd 
+  getBlog: 
+    CORS_ORIGIN: https://terra10.io,https://terra10.nl
+    DYNAMODBBLOG: ${self:service.name}-prd

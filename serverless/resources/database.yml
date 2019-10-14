@@ -2,7 +2,7 @@ Resources:
   DYNAMO: 
     Type: "AWS::DynamoDB::Table" 
     Properties: 
-      TableName: ${file(./serverless.yml):service.name}-${file(./serverless.yml):provider.stage} 
+      TableName: ${file(./serverless.yml):service.name}-${file(./serverless.yml):custom.stage} 
       SSESpecification: 
         SSEEnabled: true 
       PointInTimeRecoverySpecification: 

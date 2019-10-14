@@ -33,14 +33,16 @@ functions:
     description: GET feed from WordPress 
     environment: 
       ${self:custom.environment.functie.getWordpressFeed} 
-    events: 
+    events:   
     - http: 
         method: get 
         path: feed 
         private: true 
 
 custom: 
-  environment: ${file(./environment/dev.yml)} 
-  prefix: ${file(./environment/dev.yml):algemeen.prefix} 
-  prefix-web: ${file(./environment/dev.yml):algemeen.prefix-web} 
-  postfix: ${file(./environment/dev.yml):algemeen.postfix}
+  stage: ${opt:stage, self:provider.stage}
+  environment:
+    ${file(./environment/${self:custom.stage}.yml):}
+  prefix: ${self:custom.environment.algemeen.prefix}
+  prefix-web: ${self:custom.environment.algemeen.prefix-web}
+  postfix: ${self:custom.environment.algemeen.postfix}

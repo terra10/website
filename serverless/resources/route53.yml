@@ -10,3 +10,14 @@ Resources:
       Comment: ${file(./serverless.yml):custom.prefix-web}terra10.io
       Name: ${file(./serverless.yml):custom.prefix-web}terra10.io. 
       Type: A
+  RECORDT10NL: 
+    Type: AWS::Route53::RecordSet 
+    Properties: 
+      AliasTarget: 
+        HostedZoneId: Z2FDTNDATAQYW2 # = cloudfront
+        DNSName: 
+          Fn::GetAtt: CLOUDFRONTDISTRIBUTIONT10NL.DomainName 
+      HostedZoneName: terra10.nl.
+      Comment: ${file(./serverless.yml):custom.prefix-web}terra10.nl
+      Name: ${file(./serverless.yml):custom.prefix-web}terra10.nl. 
+      Type: A

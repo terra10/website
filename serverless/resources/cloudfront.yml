@@ -1,11 +1,11 @@
 Resources:
   ######################
-  ## S3
+  ## S3 bucket
   ######################
   BUCKET:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: ${file(./serverless.yml):service.name}-cloudfront-${file(./serverless.yml):provider.stage}
+      BucketName: ${file(./serverless.yml):service.name}-cloudfront-${file(./serverless.yml):custom.stage}
       AccessControl: Private
       VersioningConfiguration:
           Status: Suspended
@@ -30,7 +30,7 @@ Resources:
             CanonicalUser:
               Fn::GetAtt: CLOUDFRONTORIGINACCESSIDENTITY.S3CanonicalUserId
   ####################
-  ## CloudFront
+  ## CloudFront TERRA10.IO
   ####################
   CLOUDFRONTORIGINACCESSIDENTITY:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
@@ -47,7 +47,7 @@ Resources:
           Compress: true
           ForwardedValues:
             QueryString: false
-          TargetOriginId: ${file(./serverless.yml):service.name}-origin-${file(./serverless.yml):provider.stage}
+          TargetOriginId: ${file(./serverless.yml):service.name}-origin-${file(./serverless.yml):custom.stage}
           ViewerProtocolPolicy: redirect-to-https
         DefaultRootObject: index.html
         CustomErrorResponses:
@@ -67,7 +67,7 @@ Resources:
             - ""
             - - Ref: BUCKET
               - ".s3.amazonaws.com"
-          Id: ${file(./serverless.yml):service.name}-origin-${file(./serverless.yml):provider.stage}
+          Id: ${file(./serverless.yml):service.name}-origin-${file(./serverless.yml):custom.stage}
           S3OriginConfig:
             OriginAccessIdentity:
               Fn::Join:
@@ -81,8 +81,64 @@ Resources:
             - ""
             - - "arn:aws:acm:us-east-1:"
               - Ref: AWS::AccountId
-              - ":certificate/4afc4da5-db5a-4c75-a6c4-d4ac4333ae3d"
+              - ":certificate/"
+              - ${file(./serverless.yml):custom.environment.algemeen.certarn-io}
           MinimumProtocolVersion: TLSv1.1_2016
           SslSupportMethod: sni-only
-
+  ####################
+  ## CloudFront TERRA10.NL
+  ####################
+  CLOUDFRONTORIGINACCESSIDENTITYT10NL:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: "terra10.nl"
+  CLOUDFRONTDISTRIBUTIONT10NL:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - ${file(./serverless.yml):custom.prefix-web}terra10.nl
+        DefaultCacheBehavior:
+          Compress: true
+          ForwardedValues:
+            QueryString: false
+          TargetOriginId: ${file(./serverless.yml):service.name}-origin-${file(./serverless.yml):custom.stage}
+          ViewerProtocolPolicy: redirect-to-https
+        DefaultRootObject: index.html
+        CustomErrorResponses:
+        - ErrorCachingMinTTL: 300
+          ErrorCode: 403
+          ResponseCode: 200
+          ResponsePagePath: /index.html
+        - ErrorCachingMinTTL: 300
+          ErrorCode: 404
+          ResponseCode: 200
+          ResponsePagePath: /index.html
+        Enabled: true
+        HttpVersion: http2
+        Origins:
+        - DomainName:
+            Fn::Join:
+            - ""
+            - - Ref: BUCKET
+              - ".s3.amazonaws.com"
+          Id: ${file(./serverless.yml):service.name}-origin-${file(./serverless.yml):custom.stage}
+          S3OriginConfig:
+            OriginAccessIdentity:
+              Fn::Join:
+              - ""
+              - - "origin-access-identity/cloudfront/"
+                - Ref: CLOUDFRONTORIGINACCESSIDENTITYT10NL
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          AcmCertificateArn: 
+            Fn::Join:
+            - ""
+            - - "arn:aws:acm:us-east-1:"
+              - Ref: AWS::AccountId
+              - ":certificate/"
+              - ${file(./serverless.yml):custom.environment.algemeen.certarn-nl}
+          MinimumProtocolVersion: TLSv1.1_2016
+          SslSupportMethod: sni-only
 
