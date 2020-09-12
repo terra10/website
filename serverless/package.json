@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.542.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "xml-to-json-promise": "0.0.3"
   },
   "devDependencies": {
